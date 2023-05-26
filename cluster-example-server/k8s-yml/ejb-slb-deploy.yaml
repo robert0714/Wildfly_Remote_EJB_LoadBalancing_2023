@@ -1,0 +1,502 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name:  ejblb-deploy
+  labels:
+    application: ejblb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      application: ejblb
+  template:
+    metadata:
+      labels:
+        application: ejblb
+      annotations:
+        sidecar.istio.io/inject: 'true'
+    spec:
+      containers:
+      - name:  ejblb
+        image: 'image-registry.openshift-image-registry.svc:5000/mbms-morder-feature/ejblb:latest' 
+#        image:  ejblb:latest
+        imagePullPolicy: Always
+#        imagePullPolicy: IfNotPresent
+        ports: 
+            - containerPort: 9990
+              protocol: TCP
+            - containerPort: 8080
+              protocol: TCP     
+        env:
+        - name: MEMORY_REQUEST
+          valueFrom:
+            resourceFieldRef:
+              containerName:  ejblb
+              resource: requests.memory
+        - name: MEMORY_LIMIT
+          valueFrom:
+            resourceFieldRef:
+              containerName:  ejblb
+              resource: limits.memory
+        - name: JAVA_OPTS
+          value: >-
+                -javaagent:/app/elastic-apm-agent-1.33.0.jar 
+                -Djboss.bind.address=0.0.0.0 -Delastic.apm.enabled=true -Xms300m 
+                -Xmx600m
+                -Delastic.apm.server_urls=http://apm.pdc-apm.svc.cluster.local:8200
+                -Delastic.apm.service_name=ejblb
+                -Delastic.apm.application_packages=de.akquinet.jbosscc.*
+                -Delastic.apm.trace_methods=de.akquinet.jbosscc.*
+                -Delastic.apm.trace_methods_duration_threshold=100ms
+                -Delastic.apm.stack_trace_limit=80 
+        resources:
+          requests: 
+            memory: 300Mi
+            cpu: 200m
+          limits: 
+            memory: 700Mi
+            cpu: 400m
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name:  ejblb-deploy-v1
+  labels:
+    app:  ejblb-v1
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app:  ejblb-v1
+      version: v1
+  template:
+    metadata:
+      labels:
+        application: ejblb
+        app:  ejblb-v1
+        version: v1
+      annotations:
+        sidecar.istio.io/inject: 'true'
+    spec:
+      containers:
+      - name:  ejblb
+        image: 'image-registry.openshift-image-registry.svc:5000/mbms-morder-feature/ejblb:latest' 
+#        image:  ejblb:latest
+        imagePullPolicy: Always
+#        imagePullPolicy: IfNotPresent
+        ports: 
+            - containerPort: 9990
+              protocol: TCP
+            - containerPort: 8080
+              protocol: TCP     
+        env:
+        - name: MEMORY_REQUEST
+          valueFrom:
+            resourceFieldRef:
+              containerName:  ejblb
+              resource: requests.memory
+        - name: MEMORY_LIMIT
+          valueFrom:
+            resourceFieldRef:
+              containerName:  ejblb
+              resource: limits.memory
+        - name: JAVA_OPTS
+          value: >-
+                -javaagent:/app/elastic-apm-agent-1.33.0.jar 
+                -Djboss.bind.address=0.0.0.0 -Delastic.apm.enabled=true -Xms300m 
+                -Xmx600m
+                -Delastic.apm.server_urls=http://apm.pdc-apm.svc.cluster.local:8200
+                -Delastic.apm.service_name=ejblb
+                -Delastic.apm.application_packages=de.akquinet.jbosscc.*
+                -Delastic.apm.trace_methods=de.akquinet.jbosscc.*
+                -Delastic.apm.trace_methods_duration_threshold=100ms
+                -Delastic.apm.stack_trace_limit=80 
+        resources:
+          requests: 
+            memory: 300Mi
+            cpu: 200m
+          limits: 
+            memory: 700Mi
+            cpu: 400m
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name:  ejblb-deploy-v2
+  labels:
+    app:  ejblb-v2
+    version: v2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app:  ejblb-v2
+      version: v2
+  template:
+    metadata:
+      labels:
+        application: ejblb
+        app:  ejblb-v2
+        version: v2
+      annotations:
+        sidecar.istio.io/inject: 'true'
+    spec:
+      containers:
+      - name:  ejblb
+        image: 'image-registry.openshift-image-registry.svc:5000/mbms-morder-feature/ejblb:latest' 
+#        image:  ejblb:latest
+        imagePullPolicy: Always
+#        imagePullPolicy: IfNotPresent
+        ports: 
+            - containerPort: 9990
+              protocol: TCP
+            - containerPort: 8080
+              protocol: TCP     
+        env:
+        - name: MEMORY_REQUEST
+          valueFrom:
+            resourceFieldRef:
+              containerName:  ejblb
+              resource: requests.memory
+        - name: MEMORY_LIMIT
+          valueFrom:
+            resourceFieldRef:
+              containerName:  ejblb
+              resource: limits.memory
+        - name: JAVA_OPTS
+          value: >-
+                -javaagent:/app/elastic-apm-agent-1.33.0.jar 
+                -Djboss.bind.address=0.0.0.0 -Delastic.apm.enabled=true -Xms300m 
+                -Xmx600m
+                -Delastic.apm.server_urls=http://apm.pdc-apm.svc.cluster.local:8200
+                -Delastic.apm.service_name=ejblb
+                -Delastic.apm.application_packages=de.akquinet.jbosscc.*
+                -Delastic.apm.trace_methods=de.akquinet.jbosscc.*
+                -Delastic.apm.trace_methods_duration_threshold=100ms
+                -Delastic.apm.stack_trace_limit=80 
+        resources:
+          requests: 
+            memory: 300Mi
+            cpu: 200m
+          limits: 
+            memory: 700Mi
+            cpu: 400m
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name:  ejblb-deploy-v3
+  labels:
+    app:  ejblb-v3
+    version: v3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app:  ejblb-v3
+      version: v3
+  template:
+    metadata:
+      labels:
+        application: ejblb
+        app:  ejblb-v3
+        version: v3
+      annotations:
+        sidecar.istio.io/inject: 'true'
+    spec:
+      containers:
+      - name:  ejblb
+        image: 'image-registry.openshift-image-registry.svc:5000/mbms-morder-feature/ejblb:latest' 
+#        image:  ejblb:latest
+        imagePullPolicy: Always
+#        imagePullPolicy: IfNotPresent
+        ports: 
+            - containerPort: 9990
+              protocol: TCP
+            - containerPort: 8080
+              protocol: TCP     
+        env:
+        - name: MEMORY_REQUEST
+          valueFrom:
+            resourceFieldRef:
+              containerName:  ejblb
+              resource: requests.memory
+        - name: MEMORY_LIMIT
+          valueFrom:
+            resourceFieldRef:
+              containerName:  ejblb
+              resource: limits.memory
+        - name: JAVA_OPTS
+          value: >-
+                -javaagent:/app/elastic-apm-agent-1.33.0.jar 
+                -Djboss.bind.address=0.0.0.0 -Delastic.apm.enabled=true -Xms300m 
+                -Xmx600m
+                -Delastic.apm.server_urls=http://apm.pdc-apm.svc.cluster.local:8200
+                -Delastic.apm.service_name=ejblb
+                -Delastic.apm.application_packages=de.akquinet.jbosscc.*
+                -Delastic.apm.trace_methods=de.akquinet.jbosscc.*
+                -Delastic.apm.trace_methods_duration_threshold=100ms
+                -Delastic.apm.stack_trace_limit=80 
+        resources:
+          requests: 
+            memory: 300Mi
+            cpu: 200m
+          limits: 
+            memory: 700Mi
+            cpu: 400m
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name:  ejblb-deploy-v4
+  labels:
+    app:  ejblb-v4
+    version: v4
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app:  ejblb-v4
+      version: v4
+  template:
+    metadata:
+      labels:
+        application: ejblb
+        app:  ejblb-v4
+        version: v4
+      annotations:
+        sidecar.istio.io/inject: 'true'
+    spec:
+      containers:
+      - name:  ejblb
+        image: 'image-registry.openshift-image-registry.svc:5000/mbms-morder-feature/ejblb:latest' 
+#        image:  ejblb:latest
+        imagePullPolicy: Always
+#        imagePullPolicy: IfNotPresent
+        ports: 
+            - containerPort: 9990
+              protocol: TCP
+            - containerPort: 8080
+              protocol: TCP     
+        env:
+        - name: MEMORY_REQUEST
+          valueFrom:
+            resourceFieldRef:
+              containerName:  ejblb
+              resource: requests.memory
+        - name: MEMORY_LIMIT
+          valueFrom:
+            resourceFieldRef:
+              containerName:  ejblb
+              resource: limits.memory
+        - name: JAVA_OPTS
+          value: >-
+                -javaagent:/app/elastic-apm-agent-1.33.0.jar 
+                -Djboss.bind.address=0.0.0.0 -Delastic.apm.enabled=true -Xms300m 
+                -Xmx600m
+                -Delastic.apm.server_urls=http://apm.pdc-apm.svc.cluster.local:8200
+                -Delastic.apm.service_name=ejblb
+                -Delastic.apm.application_packages=de.akquinet.jbosscc.*
+                -Delastic.apm.trace_methods=de.akquinet.jbosscc.*
+                -Delastic.apm.trace_methods_duration_threshold=100ms
+                -Delastic.apm.stack_trace_limit=80 
+        resources:
+          requests: 
+            memory: 300Mi
+            cpu: 200m
+          limits: 
+            memory: 700Mi
+            cpu: 400m
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name:  ejblb-deploy-v5
+  labels: 
+    app:  ejblb-v5
+    version: v5
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app:  ejblb-v5      
+      version: v5
+  template:
+    metadata:
+      labels:
+        application: ejblb
+        app:  ejblb-v5
+        version: v5
+      annotations:
+        sidecar.istio.io/inject: 'true'
+    spec:
+      containers:
+      - name:  ejblb
+        image: 'image-registry.openshift-image-registry.svc:5000/mbms-morder-feature/ejblb:latest' 
+#        image:  ejblb:latest
+        imagePullPolicy: Always
+#        imagePullPolicy: IfNotPresent
+        ports: 
+            - containerPort: 9990
+              protocol: TCP
+            - containerPort: 8080
+              protocol: TCP     
+        env:
+        - name: MEMORY_REQUEST
+          valueFrom:
+            resourceFieldRef:
+              containerName:  ejblb
+              resource: requests.memory
+        - name: MEMORY_LIMIT
+          valueFrom:
+            resourceFieldRef:
+              containerName:  ejblb
+              resource: limits.memory
+        - name: JAVA_OPTS
+          value: >-
+                -javaagent:/app/elastic-apm-agent-1.33.0.jar 
+                -Djboss.bind.address=0.0.0.0 -Delastic.apm.enabled=true -Xms300m 
+                -Xmx600m
+                -Delastic.apm.server_urls=http://apm.pdc-apm.svc.cluster.local:8200
+                -Delastic.apm.service_name=ejblb
+                -Delastic.apm.application_packages=de.akquinet.jbosscc.*
+                -Delastic.apm.trace_methods=de.akquinet.jbosscc.*
+                -Delastic.apm.trace_methods_duration_threshold=100ms
+                -Delastic.apm.stack_trace_limit=80 
+        resources:
+          requests: 
+            memory: 300Mi
+            cpu: 200m
+          limits: 
+            memory: 700Mi
+            cpu: 400m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ejblb-service
+spec:
+  ports:
+  - name: tcp-remote
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  - name: tcp-9990
+    port: 9990
+    protocol: TCP
+    targetPort: 9990
+  selector:
+    application: ejblb
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ejblb-v1
+    service: ejblb
+  name: ejblb-service-1
+spec:
+  ports:
+  - name: tcp-remote
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  - name: tcp-9990
+    port: 9990
+    protocol: TCP
+    targetPort: 9990
+  selector:
+    app: ejblb-v1
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ejblb-v2
+    service: ejblb
+  name: ejblb-service-2
+spec:
+  ports:
+  - name: tcp-remote
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  - name: tcp-9990
+    port: 9990
+    protocol: TCP
+    targetPort: 9990
+  selector:
+    app: ejblb-v2
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ejblb-v3
+    service: ejblb
+  name: ejblb-service-3
+spec:
+  ports:
+  - name: tcp-remote
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  - name: tcp-9990
+    port: 9990
+    protocol: TCP
+    targetPort: 9990
+  selector:
+    app: ejblb-v3
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ejblb-v4
+    service: ejblb
+  name: ejblb-service-4
+spec:
+  ports:
+  - name: tcp-remote
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  - name: tcp-9990
+    port: 9990
+    protocol: TCP
+    targetPort: 9990
+  selector:
+    app: ejblb-v4
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ejblb-v5
+    service: ejblb
+  name: ejblb-service-5
+spec:
+  ports:
+  - name: tcp-remote
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  - name: tcp-9990
+    port: 9990
+    protocol: TCP
+    targetPort: 9990
+  selector:
+    app: ejblb-v5
+  sessionAffinity: None
+  type: ClusterIP  

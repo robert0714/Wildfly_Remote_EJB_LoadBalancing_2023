@@ -1,0 +1,31 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: ejb-client-gateway
+spec:
+  selector:
+    istio: ingressgateway 
+  servers:
+  - port:
+        name: http
+        number: 80
+        protocol: HTTP
+    hosts:
+    - 'ejb-client-istio-system.apps.ocp.iisi.test'  
+---
+kind: VirtualService
+apiVersion: networking.istio.io/v1alpha3
+metadata:
+  name: ejblbclient-vs 
+spec:
+  hosts:
+  - '*'
+  gateways:
+  - ejb-client-gateway
+  http:
+    - route:
+        - destination:
+            host: ejblbclient
+            port:
+              number: 8081 
+

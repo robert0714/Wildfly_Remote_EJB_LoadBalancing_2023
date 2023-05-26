@@ -1,0 +1,87 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name:  ejblbclient
+  labels:
+    app:  ejblbclient 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app:  ejblbclient
+  template:
+    metadata:
+      labels:
+        app:  ejblbclient 
+      annotations:
+        sidecar.istio.io/inject: 'true'
+    spec:
+      containers:
+      - name:  ejblbclient
+        image: 'image-registry.openshift-image-registry.svc:5000/mbms-morder-feature/ejblbclient:latest'
+#        image:  ejblbclient:latest
+        imagePullPolicy: Always
+#        imagePullPolicy: IfNotPresent
+        ports: 
+            - containerPort: 9090
+              protocol: TCP
+            - containerPort: 8081
+              protocol: TCP     
+        env:
+        - name: MEMORY_REQUEST
+          valueFrom:
+            resourceFieldRef:
+              containerName:  ejblbclient
+              resource: requests.memory
+        - name: MEMORY_LIMIT
+          valueFrom:
+            resourceFieldRef:
+              containerName:  ejblbclient
+              resource: limits.memory
+        - name: REMOTE_HOST
+          # value: ejblb-service
+          value: 'ejblb-service'
+        - name: REMOTE_EJB_HTTP_ENABLE
+          value: 'false'  
+        - name: JAVA_OPTS
+          value: >-
+                -javaagent:/app/elastic-apm-agent-1.33.0.jar 
+                -Djboss.bind.address=0.0.0.0 -Delastic.apm.enabled=true -Xms300m 
+                -Xmx600m
+                -Delastic.apm.server_urls=http://apm.pdc-apm.svc.cluster.local:8200
+                -Delastic.apm.service_name=ejblbclient
+                -Delastic.apm.application_packages=de.akquinet.jbosscc.*
+                -Delastic.apm.trace_methods=de.akquinet.jbosscc.*
+                -Delastic.apm.trace_methods_duration_threshold=100ms
+                -Delastic.apm.stack_trace_limit=80
+                -Djboss.bind.address=0.0.0.0
+                -Drmote.ejb.hostsAndPorts[0]=ejblb-service-1:8080
+                -Drmote.ejb.hostsAndPorts[1]=ejblb-service-2:8080
+                -Drmote.ejb.hostsAndPorts[2]=ejblb-service-3:8080
+                -Drmote.ejb.hostsAndPorts[3]=ejblb-service-4:8080
+                -Drmote.ejb.hostsAndPorts[4]=ejblb-service-5:8080
+        resources:
+          requests: 
+            memory: 300Mi
+            cpu: 200m
+          limits: 
+            memory: 700Mi
+            cpu: 400m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ejblbclient
+    service: ejblbclient
+  name: ejblbclient
+spec:
+  ports:
+  - name: tcp-ejb-8081
+    port: 8081
+    protocol: TCP
+    targetPort: 8081
+  selector:
+    app: ejblbclient
+  sessionAffinity: None
+  type: ClusterIP

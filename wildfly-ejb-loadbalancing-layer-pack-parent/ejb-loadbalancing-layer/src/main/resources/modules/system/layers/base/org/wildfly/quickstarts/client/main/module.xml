@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<module xmlns="urn:jboss:module:1.0" name="org.wildfly.quickstarts.client" >
+	<resources>
+		<artifact name="${org.wildfly.quickstarts:interceptor-call-ejb-node-selector}"/> 
+	</resources>
+	<dependencies> 
+	    <module name="java.logging"/>
+        <module name="javax.annotation.api"/>
+        <module name="javax.enterprise.api"/>
+        <module name="javax.inject.api"/> 
+        <module name="javax.ejb.api"/> 
+		<module name="java.naming"/> 
+        <module name="org.jboss.ejb-client" optional="true"/>
+        <module name="org.jboss.logging"/>
+        <module name="org.jboss.logmanager"/>
+        <module name="org.jboss.modules"/>
+	</dependencies>
+</module>

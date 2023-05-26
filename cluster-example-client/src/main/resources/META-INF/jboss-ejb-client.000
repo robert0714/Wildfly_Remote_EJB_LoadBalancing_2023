@@ -1,0 +1,11 @@
+<jboss-ejb-client xmlns="urn:jboss:ejb-client:1.4">
+    <client-context invocation-timeout="1000" deployment-node-selector="org.jboss.ejb.client.DeploymentNodeSelector.RoundRobinDeploymentNodeSelector" default-compression="5">
+        <ejb-receivers exclude-local-receiver="false" local-receiver-pass-by-value="true">
+            <remoting-ejb-receiver outbound-connection-ref="connection" connection-timeout="3000"/>
+        </ejb-receivers>
+        <!-- <http-connections>
+            <http-connection uri="http://localhost:8080/wildfly-services"/>
+        </http-connections> -->
+        <profile name="test-profile"/>
+    </client-context>
+</jboss-ejb-client>

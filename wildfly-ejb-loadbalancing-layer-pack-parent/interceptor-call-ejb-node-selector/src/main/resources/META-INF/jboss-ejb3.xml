@@ -1,0 +1,13 @@
+<!-- <jboss xmlns="http://www.jboss.com/xml/ns/javaee"
+       xmlns:jee="http://java.sun.com/xml/ns/javaee"
+       xmlns:ci ="urn:container-interceptors:1.0">
+    <jee:assembly-descriptor>
+        <ci:container-interceptors>             
+            <jee:interceptor-binding>
+                <ejb-name>*</ejb-name> 
+                <interceptor-class>org.wildfly.quickstarts.server.EJBInterceptor</interceptor-class>
+            </jee:interceptor-binding>
+              
+        </ci:container-interceptors>
+    </jee:assembly-descriptor>
+</jboss> -->

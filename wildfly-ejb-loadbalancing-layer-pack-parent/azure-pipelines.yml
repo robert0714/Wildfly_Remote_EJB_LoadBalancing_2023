@@ -1,0 +1,123 @@
+trigger:
+  - master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  MAVEN_CACHE_FOLDER: $(Pipeline.Workspace)/.m2/repository
+  MAVEN_OPTS: '-Dmaven.repo.local=$(MAVEN_CACHE_FOLDER)'
+  
+steps:
+  - task: Cache@2
+    inputs:
+      key: 'maven | "$(Agent.OS)" | **/pom.xml'
+      restoreKeys: |
+        maven | "$(Agent.OS)"
+        maven
+      path: $(MAVEN_CACHE_FOLDER)
+    displayName: Cache Maven local repo
+
+  # 主機環境設定
+  - task: Bash@3
+    inputs:
+      targetType: 'inline'
+      script: |
+        sudo -- sh -c "echo '60.250.171.28    oauth-openshift.apps.ocp.iisi.test' >> /etc/hosts"
+        sudo -- sh -c "echo '60.250.171.28    api.ocp.iisi.test' >> /etc/hosts"
+        sudo -- sh -c "echo '60.250.171.28    sonarqube-sonarqube.apps.ocp.iisi.test' >> /etc/hosts"
+        sudo -- sh -c "echo '60.250.171.28    default-route-openshift-image-registry.apps.ocp.iisi.test' >> /etc/hosts"
+        sudo -- sh -c "echo '{\"insecure-registries\" : [\"default-route-openshift-image-registry.apps.ocp.iisi.test\"]}' > /etc/docker/daemon.json"
+        
+        cat /etc/hosts
+        echo '目前路徑'
+        pwd
+         
+        export BUILD_NUMBER=$(Build.BuildNumber)
+        echo 'build 編號  #'${BUILD_NUMBER}
+        
+        timedatectl
+        echo 'set timezone to Asia/Taipei'
+        sudo timedatectl set-timezone Asia/Taipei
+        timedatectl
+        
+        echo '查看docker daemon'
+        cat /etc/docker/daemon.json
+        sudo systemctl restart docker
+        sudo systemctl daemon-reload
+    displayName: 'set env'
+        
+  - task: Bash@3
+    inputs:
+     targetType: 'inline'
+     script: |     
+       mkdir -p  ~/.m2/
+       mv settings.xml    ~/.m2/settings.xml                     
+       cat  ~/.m2/settings.xml           
+    displayName: 'inspect CHT_WildFly2  repositories' 
+  - task: MavenAuthenticate@0
+    displayName: 'Maven Authenticate'
+    inputs:
+      artifactsFeeds: CHT_WildFly,CHT_WildFly2  
+  - task: Bash@3
+    inputs:
+      targetType: 'inline'
+      script: |     
+        loaction=$(ls -la  ~/.m2/settings.xml | awk -F ' ' '{print $9}')
+        echo  $loaction
+        echo "##vso[task.setvariable variable=SETTING_LOCATION;issecret=false]$loaction"
+        echo  $SETTING_LOCATION
+        cat  ~/.m2/settings.xml
+    displayName: 'inspect CHT_WildFly2  repositories'     
+     
+  - task: Maven@3
+    inputs:
+      mavenPomFile: 'pom.xml'
+      goals: 'deploy'
+      options: '-U  --settings    $(SETTING_LOCATION)  -DaltDeploymentRepository=CHT_WildFly::default::https://pkgs.dev.azure.com/iisiD210641-a/CHT_WildFly/_packaging/CHT_WildFly/maven/v1'
+      publishJUnitResults: false
+      testResultsFiles: '**/surefire-reports/TEST-*.xml'
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '8'
+      mavenVersionOption: 'Default'
+      mavenOptions: '-Xmx3072m  $(MAVEN_OPTS)'
+      mavenAuthenticateFeed: true
+      effectivePomSkip: false
+      sonarQubeRunAnalysis: false
+      checkStyleRunAnalysis: false # replaced by sonarqube
+      pmdRunAnalysis: false # PMD does not support jdk11
+      findBugsRunAnalysis: false #Findbugs does not support jdk11
+      javadoc: false
+
+  - task: Maven@3
+    inputs:
+      mavenPomFile: 'pom.xml'
+      goals: 'deploy'
+      options: '-U  --settings    $(SETTING_LOCATION)  -DaltDeploymentRepository=CHT_WildFly2::default::https://pkgs.dev.azure.com/iisiD210641-a/CHT_WildFly/_packaging/CHT_WildFly2/maven/v1'
+      publishJUnitResults: false
+      testResultsFiles: '**/surefire-reports/TEST-*.xml'
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '8'
+      mavenVersionOption: 'Default'
+      mavenOptions: '-Xmx3072m  $(MAVEN_OPTS)'
+      mavenAuthenticateFeed: true
+      effectivePomSkip: false
+      sonarQubeRunAnalysis: false
+      checkStyleRunAnalysis: false # replaced by sonarqube
+      pmdRunAnalysis: false # PMD does not support jdk11
+      findBugsRunAnalysis: false #Findbugs does not support jdk11
+      javadoc: false
+    continueOnError: true
+  # Publish code coverage results
+  # Publish Cobertura or JaCoCo code coverage results from a build
+  # https://docs.microsoft.com/zh-tw/azure/devops/pipelines/tasks/test/publish-code-coverage-results?view=azure-devops
+  - task: PublishCodeCoverageResults@1
+    inputs:
+      summaryFileLocation: $(System.DefaultWorkingDirectory)/**/site/jacoco/jacoco.xml
+      pathToSources: $(System.DefaultWorkingDirectory)/src/main/java/
+      #failIfCoverageEmpty: false # Optional
+
+  - script: mvn --settings settings.xml sonar:sonar
+    displayName: 'Run sonarqube '
+    continueOnError: true
+    

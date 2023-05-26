@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<layer-spec xmlns="urn:jboss:galleon:layer-spec:1.0" name="ejb-client-side-interceptor">
+    <!-- <feature spec="subsystem.ejb3">
+        <feature spec="subsystem.ejb3.client-interceptors.interceptor">
+            <param name="module" value="org.wildfly.quickstarts.client"/>
+            <param name="class" value="org.wildfly.quickstarts.client.ClientInterceptor"/> 
+        </feature>
+    </feature> -->
+    <packages>
+        <package name="org.wildfly.quickstarts.client"/>
+    </packages>
+</layer-spec>
+

@@ -1,0 +1,26 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: loadbalance-gateway
+spec:
+  selector:
+    istio: ingressgateway 
+  servers:
+  - port:
+      number: 8080
+      name: ejb-port
+      protocol: TCP
+    hosts:
+    - 'ejb-istio-system.apps.ocp.iisi.test'  
+---
+kind: VirtualService
+apiVersion: networking.istio.io/v1alpha3
+metadata:
+  name: ejblb-vs 
+spec:
+  hosts:
+    - ejblb-service
+  tcp:
+    - route:
+        - destination:
+            host: ejblb-service

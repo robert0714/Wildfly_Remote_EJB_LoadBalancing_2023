@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.wildfly.quickstarts</groupId>
+        <artifactId>wildfly-ejb-loadbalancing-layer-pack-parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>ejb-loadbalancing-layer</artifactId>
+    <name>ejb-loadbalancing-layer</name>
+    <packaging>pom</packaging> 
+    <properties>        
+        <version.org.wildfly>26.1.3.Final</version.org.wildfly>
+    </properties>
+    <dependencies> 
+        <dependency>            
+		    <groupId>${project.groupId}</groupId>	
+			<artifactId>interceptor-call-ejb-node-selector</artifactId> 
+            <version>${project.version}</version>            
+		</dependency> 
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-galleon-pack</artifactId>
+            <version>${version.org.wildfly}</version>
+            <type>zip</type>
+        </dependency>
+        <!-- <dependency>
+			<groupId>org.jboss</groupId>
+			<artifactId>jboss-ejb-client</artifactId>
+			<version>4.0.44.Final</version> 
+            <scope>provided</scope>
+		</dependency> -->
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.wildfly.galleon-plugins</groupId>
+                <artifactId>wildfly-galleon-maven-plugin</artifactId>
+                <version>${version.org.wildfly.galleon-plugins}</version>
+                <executions>
+                    <execution>
+                        <id>wildfly-datasources-galleon-pack-build</id>
+                        <goals>
+                            <goal>build-user-feature-pack</goal>
+                        </goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <translate-to-fpl>true</translate-to-fpl>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
