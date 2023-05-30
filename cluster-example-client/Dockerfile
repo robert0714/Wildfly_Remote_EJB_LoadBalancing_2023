@@ -20,7 +20,7 @@ WORKDIR /app
 COPY --from=builder /app0 .
 
  
-EXPOSE 8081/tcp 9990/tcp
+EXPOSE 8081/tcp 8080/tcp 9990/tcp 
 
 ENV TZ=Asia/Taipei
 ENV JAVA_OPTS=""
