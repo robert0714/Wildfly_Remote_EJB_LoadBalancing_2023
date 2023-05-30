@@ -29,4 +29,5 @@ jobs:
         run:  |
             echo $GITHUB_TOKEN | docker login ghcr.io -u USERNAME --password-stdin
             sed -i 's|</project>|<distributionManagement><repository><id>github</id><name>GitHub</name><url>https://maven.pkg.github.com/robert0714/Wildfly_Remote_EJB_LoadBalancing_2023</url></repository></distributionManagement></project>|g'  pom.xml ;
-            mvn -f  deploy
+            mvn install
+            mvn deploy

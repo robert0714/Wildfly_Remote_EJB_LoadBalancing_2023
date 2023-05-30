@@ -29,7 +29,7 @@ jobs:
         working-directory: ./
         run:  |
             echo $GITHUB_TOKEN | docker login ghcr.io -u USERNAME --password-stdin
-            mvn package -Pwildfly
+            mvn install -Pwildfly
             
             docker build -f cluster-example-client/ --build-arg GITHUB_TOKEN=$GITHUB_TOKEN -t ghcr.io/robert0714/cluster-example-server:latest .
             docker build -f cluster-example-client/ --build-arg GITHUB_TOKEN=$GITHUB_TOKEN -t ghcr.io/robert0714/cluster-example-server:${{ steps.date.outputs.date }} .
