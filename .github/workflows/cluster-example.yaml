@@ -38,8 +38,8 @@ jobs:
         run:  |
             echo $GITHUB_TOKEN | docker login ghcr.io -u USERNAME --password-stdin
             
-            docker build --build-arg GITHUB_TOKEN=$GITHUB_TOKEN -t ghcr.io/robert0714/cluster-example-server:latest .
-            docker build --build-arg GITHUB_TOKEN=$GITHUB_TOKEN -t ghcr.io/robert0714/cluster-example-server:${{ steps.date.outputs.date }} .
+            docker build --build-arg GITHUB_TOKEN=$GITHUB_TOKEN -t ghcr.io/robert0714/cluster-example-client:latest .
+            docker build --build-arg GITHUB_TOKEN=$GITHUB_TOKEN -t ghcr.io/robert0714/cluster-example-client:${{ steps.date.outputs.date }} .
             docker push ghcr.io/robert0714/cluster-example-client:latest
             docker push ghcr.io/robert0714/cluster-example-client:${{ steps.date.outputs.date }}
 
