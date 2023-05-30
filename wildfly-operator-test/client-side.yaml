@@ -7,3 +7,13 @@ spec:
   applicationImage:  ghcr.io/robert0714/cluster-example-client:latest
   replicas: 1
   bootableJar: true
+  env:
+        - name: REMOTE_HOST
+          value: 'ejblb-loadbalancer'
+        - name: REMOTE_EJB_HTTP_ENABLE
+          value: 'false'  
+        - name: JAVA_OPTS
+          value: >- 
+                -Djboss.bind.address=0.0.0.0  
+                -Xms300m 
+                -Xmx600m

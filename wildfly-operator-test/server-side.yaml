@@ -7,3 +7,9 @@ spec:
   applicationImage: ghcr.io/robert0714/cluster-example-server:latest
   replicas: 5
   bootableJar: true
+  env:
+        - name: JAVA_OPTS
+          value: >- 
+                -Djboss.bind.address=0.0.0.0
+                -Xms300m 
+                -Xmx600m  
