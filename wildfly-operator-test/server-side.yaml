@@ -7,7 +7,24 @@ spec:
   applicationImage: ghcr.io/robert0714/cluster-example-server:latest
   replicas: 5
   bootableJar: true
+  resources:
+    requests: 
+      memory: 300Mi
+      cpu: 200m
+    limits: 
+      memory: 700Mi
+      cpu: 400m
   env:
+        - name: MEMORY_REQUEST
+          valueFrom:
+            resourceFieldRef:
+              containerName:  ejblb
+              resource: requests.memory
+        - name: MEMORY_LIMIT
+          valueFrom:
+            resourceFieldRef:
+              containerName:  ejblb
+              resource: limits.memory
         - name: JAVA_OPTS
           value: >- 
                 -Djboss.bind.address=0.0.0.0

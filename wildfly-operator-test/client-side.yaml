@@ -7,7 +7,24 @@ spec:
   applicationImage:  ghcr.io/robert0714/cluster-example-client:latest
   replicas: 1
   bootableJar: true
+  resources:
+    requests: 
+      memory: 300Mi
+      cpu: 200m
+    limits: 
+      memory: 700Mi
+      cpu: 400m
   env:
+        - name: MEMORY_REQUEST
+          valueFrom:
+            resourceFieldRef:
+              containerName:  ejblbclient
+              resource: requests.memory
+        - name: MEMORY_LIMIT
+          valueFrom:
+            resourceFieldRef:
+              containerName:  ejblbclient
+              resource: limits.memory
         - name: REMOTE_HOST
           value: 'ejblb-loadbalancer'
         - name: REMOTE_EJB_HTTP_ENABLE
