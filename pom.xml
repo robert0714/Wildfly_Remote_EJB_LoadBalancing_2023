@@ -9,7 +9,7 @@
 	<name>Cluster - client example - Parent</name>
 
 	<repositories>
-		<repository>
+	    <repository>
 			<id>jboss-public-repository-group</id>
 			<name>JBoss Public Maven Repository Group</name> 
 			<url>https://repository.jboss.org/nexus/content/groups/public/</url>
@@ -22,7 +22,21 @@
 				<enabled>true</enabled>
 				<updatePolicy>never</updatePolicy>
 			</snapshots>
-		</repository>
+		</repository> 
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+            <id>github</id>
+			<name>GitHub</name>
+			<url>https://maven.pkg.github.com/robert0714/Wildfly_Remote_EJB_LoadBalancing_2023</url>
+            <layout>default</layout>
+        </repository> 
 	</repositories>
 
 	<properties>

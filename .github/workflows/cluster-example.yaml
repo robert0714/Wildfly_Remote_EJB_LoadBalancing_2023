@@ -1,4 +1,4 @@
-name: cluster-example-server images ci
+name: cluster-example images ci
 
 on:
   push:
