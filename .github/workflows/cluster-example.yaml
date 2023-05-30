@@ -23,7 +23,7 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 8  
-      - name: Deploy to Github Package Registry
+      - name: Compilling 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         working-directory: ./
@@ -31,12 +31,26 @@ jobs:
             echo $GITHUB_TOKEN | docker login ghcr.io -u USERNAME --password-stdin
             mvn install -Pwildfly
             
-            docker build -f cluster-example-client/Dockerfile --build-arg GITHUB_TOKEN=$GITHUB_TOKEN -t ghcr.io/robert0714/cluster-example-server:latest .
-            docker build -f cluster-example-client/Dockerfile --build-arg GITHUB_TOKEN=$GITHUB_TOKEN -t ghcr.io/robert0714/cluster-example-server:${{ steps.date.outputs.date }} .
+      - name: Deploy Client App to Github Container Image Registry
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: ./cluster-example-client/
+        run:  |
+            echo $GITHUB_TOKEN | docker login ghcr.io -u USERNAME --password-stdin
+            
+            docker build --build-arg GITHUB_TOKEN=$GITHUB_TOKEN -t ghcr.io/robert0714/cluster-example-server:latest .
+            docker build --build-arg GITHUB_TOKEN=$GITHUB_TOKEN -t ghcr.io/robert0714/cluster-example-server:${{ steps.date.outputs.date }} .
             docker push ghcr.io/robert0714/cluster-example-client:latest
             docker push ghcr.io/robert0714/cluster-example-client:${{ steps.date.outputs.date }}
 
-            docker build -f cluster-example-server/Dockerfile --build-arg GITHUB_TOKEN=$GITHUB_TOKEN -t ghcr.io/robert0714/cluster-example-server:latest .
-            docker build -f cluster-example-server/Dockerfile  --build-arg GITHUB_TOKEN=$GITHUB_TOKEN -t ghcr.io/robert0714/cluster-example-server:${{ steps.date.outputs.date }} .
+      - name: Deploy Server App to Github Container Image Registry
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: ./cluster-example-server/
+        run:  |
+            echo $GITHUB_TOKEN | docker login ghcr.io -u USERNAME --password-stdin  
+
+            docker build --build-arg GITHUB_TOKEN=$GITHUB_TOKEN -t ghcr.io/robert0714/cluster-example-server:latest .
+            docker build --build-arg GITHUB_TOKEN=$GITHUB_TOKEN -t ghcr.io/robert0714/cluster-example-server:${{ steps.date.outputs.date }} .
             docker push ghcr.io/robert0714/cluster-example-server:latest
-            docker push ghcr.io/robert0714/cluster-example-server:${{ steps.date.outputs.date }}
+            docker push ghcr.io/robert0714/cluster-example-server:${{ steps.date.outputs.date }}                        

@@ -68,8 +68,7 @@
 					  <layer>jaxrs</layer>
 			          <layer>ejb</layer>
 					  <layer>web-console</layer> 
-				  </layers>
-				   
+				  </layers>				   
 				  <cloud>
 					  <type>kubernetes</type>
 				  </cloud>
