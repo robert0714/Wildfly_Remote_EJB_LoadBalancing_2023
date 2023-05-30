@@ -1,0 +1,32 @@
+name: wildfly-ejb-loadbalancing-layer-pack-parent images ci
+
+on:
+  push:
+    paths:
+      - 'wildfly-ejb-loadbalancing-layer-pack-parent/**'
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+      - name: Set up JDK 8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 8  
+      - name: Deploy to Github Package Registry
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: ./wildfly-ejb-loadbalancing-layer-pack-parent/
+        run:  |
+            echo $GITHUB_TOKEN | docker login ghcr.io -u USERNAME --password-stdin
+            sed -i 's|</project>|<distributionManagement><repository><id>github</id><name>GitHub</name><url>https://maven.pkg.github.com/robert0714/Wildfly_Remote_EJB_LoadBalancing_2023</url></repository></distributionManagement></project>|g'  pom.xml ;
+            mvn -f  deploy

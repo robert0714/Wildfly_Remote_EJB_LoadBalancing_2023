@@ -1,0 +1,9 @@
+apiVersion: wildfly.org/v1alpha1
+kind: WildFlyServer
+metadata:
+  name: ejblb
+spec:
+  # applicationImage: 'image-registry.openshift-image-registry.svc:5000/mbms-morder-feature/ejblb:latest' 
+  applicationImage: ghcr.io/robert0714/cluster-example-server:latest
+  replicas: 5
+  bootableJar: true
