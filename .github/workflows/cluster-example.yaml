@@ -28,6 +28,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         working-directory: ./
         run:  |
+            sed -i 's|</repositories>| <repository><id>github</id><name>GitHub</name><url>https://maven.pkg.github.com/robert0714/Wildfly_Remote_EJB_LoadBalancing_2023</url></repository></repositories>|g'  pom.xml
             echo $GITHUB_TOKEN | docker login ghcr.io -u USERNAME --password-stdin
             mvn install -Pwildfly
             

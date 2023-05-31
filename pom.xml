@@ -22,21 +22,7 @@
 				<enabled>true</enabled>
 				<updatePolicy>never</updatePolicy>
 			</snapshots>
-		</repository> 
-        <repository>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </snapshots>
-            <id>github</id>
-			<name>GitHub</name>
-			<url>https://maven.pkg.github.com/robert0714/Wildfly_Remote_EJB_LoadBalancing_2023</url>
-            <layout>default</layout>
-        </repository> 
+		</repository>
 	</repositories>
 
 	<properties>

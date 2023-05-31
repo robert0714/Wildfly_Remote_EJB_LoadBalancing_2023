@@ -193,6 +193,7 @@
 									  <script-files>
 										  <script>cli/add-inceptors.cli</script>
 										  <script>cli/${folder}/cors_filters.cli</script>
+										  <!-- <script>cli/adjust-port.cli</script> -->
 										  <!-- <script>cli/enable-webconsole.cli</script> -->
 									  </script-files>
 									  <resolve-expressions>false</resolve-expressions>
