@@ -183,6 +183,7 @@
 							      <layer>ejb-client-side-interceptor</layer>
 								  <layer>ejb-lite</layer>
 								  <layer>jaxrs</layer>
+								  <layer>microprofile-metrics</layer>
 								  <!-- <layer>web-console</layer>  -->
 							  </layers>
 							  <cloud>

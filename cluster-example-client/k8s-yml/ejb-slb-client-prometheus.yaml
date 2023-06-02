@@ -1,0 +1,83 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name:  ejblbclient-deploy
+  labels:
+    application: ejblbclient
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      application: ejblbclient
+  template:
+    metadata:
+      labels:
+        application: ejblbclient
+      annotations:
+        sidecar.istio.io/inject: 'true'
+    spec:
+      containers:
+      - name:  ejblbclient
+        image: 'ghcr.io/robert0714/cluster-example-client:latest'
+        imagePullPolicy: Always
+        ports: 
+            - containerPort: 9990
+              protocol: TCP
+            - containerPort: 8080
+              protocol: TCP     
+        env:
+        - name: MEMORY_REQUEST
+          valueFrom:
+            resourceFieldRef:
+              containerName:  ejblbclient
+              resource: requests.memory
+        - name: MEMORY_LIMIT
+          valueFrom:
+            resourceFieldRef:
+              containerName:  ejblbclient
+              resource: limits.memory
+        - name: JAVA_OPTS
+          value: >- 
+                -Djboss.bind.address=0.0.0.0 
+                -Xms300m 
+                -Xmx600m 
+                -Dwildfly.statistics-enabled=true
+        resources:
+          requests: 
+            memory: 300Mi
+            cpu: 200m
+          limits: 
+            memory: 700Mi
+            cpu: 400m
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ejblbclient-service
+spec:
+  ports:
+  - name: tcp-remote
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  - name: tcp-9990
+    port: 9990
+    protocol: TCP
+    targetPort: 9990
+  selector:
+    application: ejblbclient
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: sm-ejblbclient
+spec:
+  selector:
+    matchLabels:
+      application: ejblbclient
+  endpoints:
+  - path: /metrics/
+    port: tcp-9990  

@@ -67,7 +67,8 @@
 					  <layer>ejb-server-side-interceptor</layer>				      
 					  <layer>jaxrs</layer>
 			          <layer>ejb</layer>
-					  <layer>web-console</layer> 
+					  <layer>web-console</layer>
+					  <layer>microprofile-metrics</layer>
 				  </layers>				   
 				  <cloud>
 					  <type>kubernetes</type>
