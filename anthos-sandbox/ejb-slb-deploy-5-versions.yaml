@@ -1,0 +1,109 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ejblb-v1
+    service: ejblb
+  name: ejblb-service-1
+spec:
+  ports:
+  - name: tcp-remote
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  - name: tcp-9990
+    port: 9990
+    protocol: TCP
+    targetPort: 9990
+  selector:
+    app: ejblb-v1
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ejblb-v2
+    service: ejblb
+  name: ejblb-service-2
+spec:
+  ports:
+  - name: tcp-remote
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  - name: tcp-9990
+    port: 9990
+    protocol: TCP
+    targetPort: 9990
+  selector:
+    app: ejblb-v2
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ejblb-v3
+    service: ejblb
+  name: ejblb-service-3
+spec:
+  ports:
+  - name: tcp-remote
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  - name: tcp-9990
+    port: 9990
+    protocol: TCP
+    targetPort: 9990
+  selector:
+    app: ejblb-v3
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ejblb-v4
+    service: ejblb
+  name: ejblb-service-4
+spec:
+  ports:
+  - name: tcp-remote
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  - name: tcp-9990
+    port: 9990
+    protocol: TCP
+    targetPort: 9990
+  selector:
+    app: ejblb-v4
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: ejblb-v5
+    service: ejblb
+  name: ejblb-service-5
+spec:
+  ports:
+  - name: tcp-remote
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  - name: tcp-9990
+    port: 9990
+    protocol: TCP
+    targetPort: 9990
+  selector:
+    app: ejblb-v5
+  sessionAffinity: None
+  type: ClusterIP  

@@ -46,6 +46,11 @@ spec:
                 -Xms300m 
                 -Xmx600m 
                 -Dwildfly.statistics-enabled=true
+                -Drmote.ejb.hostsAndPorts[0]=ejblb-service-1:8080
+                -Drmote.ejb.hostsAndPorts[1]=ejblb-service-2:8080
+                -Drmote.ejb.hostsAndPorts[2]=ejblb-service-3:8080
+                -Drmote.ejb.hostsAndPorts[3]=ejblb-service-4:8080
+                -Drmote.ejb.hostsAndPorts[4]=ejblb-service-5:8080
         resources:
           requests: 
             memory: 300Mi
