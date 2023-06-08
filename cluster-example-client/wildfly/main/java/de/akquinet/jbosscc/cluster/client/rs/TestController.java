@@ -44,6 +44,8 @@ public class TestController {
 		try {
 			RemoteStateless statelessProxy = remoteEJBClient.lookupRemoteStatelessBean();
 			nodeName = statelessProxy.getNodeName();
+            log.info("nodeName: "+ nodeName); 
+		} catch (Exception e) {
 		} catch (Exception e) {
 			log.error(e.getMessage(), e); 
 		}
