@@ -14,7 +14,7 @@ spec:
     protocol: TCP
     targetPort: 9990
   selector:
-    application: ejblb
+    service: ejblb
   sessionAffinity: None
   type: ClusterIP
  

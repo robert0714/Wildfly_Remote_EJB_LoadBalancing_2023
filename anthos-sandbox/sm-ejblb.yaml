@@ -1,0 +1,11 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: sm-ejblb
+spec:
+  selector:
+    matchLabels:
+      service: ejblb
+  endpoints:
+  - path: /metrics/
+    port: tcp-9990
