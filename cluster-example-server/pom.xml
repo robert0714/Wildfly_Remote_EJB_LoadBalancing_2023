@@ -79,6 +79,7 @@
 							  <script>cli/add-inceptors.cli</script> 
 							  <script>cli/enable-webconsole.cli</script>
                               <script>cli/for-sandox.cli</script>
+                              <script>cli/ejb-monitor.cli</script>                              
 						  </script-files>
 						  <resolve-expressions>false</resolve-expressions>
 					  </cli-session>
