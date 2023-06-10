@@ -17,13 +17,17 @@ kubectl -n monitoring port-forward svc/grafana 3001:3000
 ```
 kubectl  port-forward svc/ejblbclient-service  8081:8080
 ```
-## NodeSelector Approaches
+## Test Approaches
 * Use Anthos Sandbox 's Web Preview
   * path: ``/test/stateless``
     ```
     https://8081-cs-983647568396-default.cs-asia-east1-jnrc.cloudshell.dev/test/stateless?authuser=0&redirectedPreviously=true
     ```
-
+* Use siege
+  ```bash 
+  sudo apt install -y siege
+  siege -c 100 -r 200 -d1 'http://localhost:8081/test/stateless'
+  ```
 ## NodeSelector Approaches - Using Selectors
 ```
 podNames=$(kubectl get pods -l application=ejblb  --no-headers -o custom-columns=":metadata.name")

@@ -65,8 +65,8 @@ spec:
     port: 9990
     protocol: TCP
     targetPort: 9990
-  selector:
-    service: ejblb
+  selector:  
+    application: ejblb
   sessionAffinity: None
   type: ClusterIP
 ---
@@ -77,7 +77,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      service: ejblb
+      application: ejblb
   endpoints:
-  - path: /metrics/
+  - path: /metrics
     port: tcp-9990  
