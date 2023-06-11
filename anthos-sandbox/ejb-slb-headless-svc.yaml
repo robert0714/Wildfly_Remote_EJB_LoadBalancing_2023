@@ -13,8 +13,12 @@ spec:
     port: 9990
     protocol: TCP
     targetPort: 9990
+  - name: tcp-7600
+    port: 7600
+    protocol: TCP
+    targetPort: 7600    
   selector:
-    service: ejblb
+    application: ejblb
   sessionAffinity: None
   type: ClusterIP
  
