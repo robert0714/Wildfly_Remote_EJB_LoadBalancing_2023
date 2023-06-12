@@ -22,3 +22,67 @@ spec:
   sessionAffinity: None
   type: ClusterIP
  
+---
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: ejblb
+  labels:
+    application: ejblb 
+spec:
+  replicas: 5
+  selector:
+    matchLabels: 
+      application: ejblb
+  serviceName:  ejblb-headless-svc    
+  template:
+    metadata: 
+      labels: 
+        application: ejblb
+    spec:      
+      volumes:
+        - name: ejblb-volume
+          emptyDir: {}
+      containers:
+        - name: ejblb
+          image: 'ghcr.io/robert0714/cluster-example-server:latest'
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+            - name: admin
+              containerPort: 9990
+              protocol: TCP
+          env:
+            - name: TZ
+              value: Asia/Taipei            
+            - name: JAVA_OPTS
+              value: >-
+                -Dwildfly.statistics-enabled=true
+                -Djboss.bind.address=0.0.0.0 
+                -Xms300m 
+                -Xmx600m
+            - name: KUBERNETES_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace            
+            - name: STATEFULSET_HEADLESS_SERVICE_NAME
+              value: ejb-txn-remote-call-client-headless
+            - name: JAVA_ARGS
+              value: >-
+                -Djboss.server.data.dir=/opt/jboss/container/wildfly-bootable-jar-data/standalone/data
+                --install-dir=/opt/jboss/container/wildfly-bootable-jar-server
+            - name: JBOSS_HOME
+              value: /opt/jboss/container/wildfly-bootable-jar-server
+          resources:
+            limits:
+              cpu: 800m
+              memory: 700Mi
+            requests:
+              cpu: 400m
+              memory: 300Mi              
+          volumeMounts:
+            - name: ejblb-volume
+              mountPath: /opt/jboss/container/wildfly-bootable-jar-data/standalone/data
+              
