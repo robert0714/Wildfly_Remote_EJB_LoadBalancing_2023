@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: ejblb-headless-svc
+  name: ejbclient-headless-svc
 spec:
   clusterIP: None
   ports:
@@ -12,13 +12,9 @@ spec:
   - name: tcp-9990
     port: 9990
     protocol: TCP
-    targetPort: 9990
-  - name: tcp-7600
-    port: 7600
-    protocol: TCP
-    targetPort: 7600    
+    targetPort: 9990 
   selector:
-    application: ejblb
+    application: ejbclient
   sessionAffinity: None
   type: ClusterIP
  
@@ -26,26 +22,26 @@ spec:
 kind: StatefulSet
 apiVersion: apps/v1
 metadata:
-  name: ejblb
+  name: ejbclient
   labels:
-    application: ejblb 
+    application: ejbclient 
 spec:
-  replicas: 5
+  replicas: 1
   selector:
     matchLabels: 
-      application: ejblb
-  serviceName:  ejblb-headless-svc    
+      application: ejbclient
+  serviceName:  ejbclient-headless-svc    
   template:
     metadata: 
       labels: 
-        application: ejblb
+        application: ejbclient
     spec:      
       volumes:
-        - name: ejblb-volume
+        - name: ejbclient-volume
           emptyDir: {}
       containers:
-        - name: ejblb
-          image: 'ghcr.io/robert0714/cluster-example-server:latest'
+        - name: ejbclient
+          image: 'ghcr.io/robert0714/cluster-example-client:latest'
           ports:
             - name: http
               containerPort: 8080
@@ -62,13 +58,23 @@ spec:
                 -Djboss.bind.address=0.0.0.0 
                 -Xms300m 
                 -Xmx600m
+                -Drmote.ejb.hostsAndPorts[0]=ejblb-0.ejblb-headless-svc:8080
+                -Drmote.ejb.hostsAndPorts[1]=ejblb-1.ejblb-headless-svc:8080
+                -Drmote.ejb.hostsAndPorts[2]=ejblb-2.ejblb-headless-svc:8080
+                -Drmote.ejb.hostsAndPorts[3]=ejblb-3.ejblb-headless-svc:8080
+                -Drmote.ejb.hostsAndPorts[4]=ejblb-4.ejblb-headless-svc:8080
+                -Drmote.ejb.hostsAndPorts[5]=ejblb-5.ejblb-headless-svc:8080
+                -Drmote.ejb.hostsAndPorts[6]=ejblb-6.ejblb-headless-svc:8080
+                -Drmote.ejb.hostsAndPorts[7]=ejblb-7.ejblb-headless-svc:8080
+                -Drmote.ejb.hostsAndPorts[8]=ejblb-8.ejblb-headless-svc:8080
+                -Drmote.ejb.hostsAndPorts[9]=ejblb-9.ejblb-headless-svc:8080
             - name: KUBERNETES_NAMESPACE
               valueFrom:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: metadata.namespace            
             - name: STATEFULSET_HEADLESS_SERVICE_NAME
-              value: ejb-txn-remote-call-client-headless
+              value: ejbclient-headless-svc
             - name: JAVA_ARGS
               value: >-
                 -Djboss.server.data.dir=/opt/jboss/container/wildfly-bootable-jar-data/standalone/data
@@ -83,6 +89,6 @@ spec:
               cpu: 400m
               memory: 300Mi              
           volumeMounts:
-            - name: ejblb-volume
+            - name: ejbclient-volume
               mountPath: /opt/jboss/container/wildfly-bootable-jar-data/standalone/data
               
